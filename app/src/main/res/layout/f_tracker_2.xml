@@ -1,0 +1,50 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="drr.com.glocal.tracker.Tracker.TrackerFragment">
+
+    <!-- This Layout will contain the MapFragment that gets added at runtime -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="450dp"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/f_cont_map_fragment">
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/f_cont_map_fragment"
+        android:id="@+id/buttons_layout"
+        android:orientation="horizontal"
+        >
+
+        <Button
+            android:layout_width="130dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:id="@+id/btn_start_tracking"
+            android:text="Start"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/f_button_background"/>
+
+        <Button
+            android:layout_width="130dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:id="@+id/btn_stop_tracking"
+            android:text="Stop"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:enabled="false"
+            android:background="@drawable/f_button_background"/>
+
+    </RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,50 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="drr.com.glocal.startup.StartUp.StartUpFragment">
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/glocal_splash_new" />
+
+    <RelativeLayout
+        android:layout_height="100dp"
+        android:layout_width="250dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="350dp"
+        android:background="@drawable/splash_glocal_logo">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="go local"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="50dp"
+            android:textColor="#FFB900"
+            android:textSize="40sp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="67dp"
+            android:layout_marginLeft="140dp"
+            android:text="BETA"
+            android:textColor="#FFB900"
+            android:textSize="20sp"
+            />
+        <ProgressBar
+            android:id="@+id/a_startup_loading_progress"
+            style="@android:style/Widget.Holo.Light.ProgressBar.Large"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="200dp"
+            android:layout_marginTop="60dp"
+            >
+        </ProgressBar>
+    </RelativeLayout>
+
+</RelativeLayout>
