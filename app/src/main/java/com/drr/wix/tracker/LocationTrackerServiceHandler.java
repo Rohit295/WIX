@@ -5,7 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.drr.glocal.model.TrackInfo;
+import com.drr.wix.model.TrackInfo;
 
 
 /**

@@ -3,6 +3,9 @@ package com.drr.wix.api;
 import android.content.Context;
 import android.util.Log;
 
+import com.drr.wix.model.TrackInfo;
+import com.drr.wix.model.TrackLocationInfo;
+import com.drr.wix.model.UserInfo;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
