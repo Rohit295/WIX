@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 
 import com.drr.wix.api.ApiClient;
 import com.drr.wix.helper.TrackerHelper;
+import com.drr.wix.model.UserInfo;
 import com.drr.wix.tracker.Tracker;
 
 
