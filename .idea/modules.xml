@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/WIX.iml" filepath="$PROJECT_DIR$/WIX.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wix-app.iml" filepath="$PROJECT_DIR$/wix-app.iml" />
     </modules>
   </component>
 </project>
