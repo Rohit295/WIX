@@ -8,8 +8,8 @@ import android.os.AsyncTask;
 
 import com.drr.wix.api.ApiClient;
 import com.drr.wix.helper.TrackerHelper;
-import com.drr.wix.model.UserInfo;
 import com.drr.wix.tracker.Tracker;
+import com.wix.common.model.UserInfo;
 
 
 /**
@@ -31,13 +31,13 @@ public class StartUpAsyncRegisterUser extends AsyncTask<String, Integer, UserInf
         registeredUser = ApiClient.getInstance().login(listOfAccountNames[0]);
         if (registeredUser == null) {
             registeredUser = new UserInfo();
-            registeredUser.setId(455l);
+            registeredUser.setId("455l");
         }
 
         SharedPreferences trackerPreferences =
                 mContext.getSharedPreferences(TrackerHelper.PREFERENCES_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = trackerPreferences.edit();
-        editor.putLong(listOfAccountNames[0], registeredUser.getId());
+        editor.putString(listOfAccountNames[0], registeredUser.getId());
         boolean committed = editor.commit();
 
         return registeredUser;

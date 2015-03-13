@@ -8,7 +8,7 @@ import android.util.Log;
 
 
 import com.drr.wix.api.ApiClient;
-import com.drr.wix.model.TrackInfo;
+import com.wix.common.model.TrackInfo;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
