@@ -1,21 +1,26 @@
 package com.drr.wix.startup;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
+import com.drr.wix.AppSettingsInfo;
 import com.drr.wix.api.ApiClient;
-import com.drr.wix.helper.TrackerHelper;
 import com.drr.wix.tracker.Tracker;
-import com.wix.common.model.UserInfo;
+import com.wix.common.model.RouteExecutionDTO;
+import com.wix.common.model.UserDTO;
+
+import java.util.List;
 
 
 /**
  * Created by rohitman on 11/9/2014.
  */
-public class StartUpAsyncRegisterUser extends AsyncTask<String, Integer, UserInfo> {
+public class StartUpAsyncRegisterUser extends AsyncTask<String, Integer, UserDTO> {
+
     private Context mContext;
 
     public StartUpAsyncRegisterUser(Context contextToUse) {
@@ -23,30 +28,38 @@ public class StartUpAsyncRegisterUser extends AsyncTask<String, Integer, UserInf
     }
 
     @Override
-    protected UserInfo doInBackground(String... listOfAccountNames) {
-        UserInfo registeredUser;
+    protected UserDTO doInBackground(String... str) {
+
+        AccountManager manager = AccountManager.get(mContext);
+        Account[] listOfAccounts = manager.getAccountsByType("com.google");
+        String googleAccount = listOfAccounts[0].name;
 
         // TODO registeredUser Null check needs to behave differently. Currently set this way
         // because of a bug in login
-        registeredUser = ApiClient.getInstance().login(listOfAccountNames[0]);
+        UserDTO registeredUser = ApiClient.getInstance().login(googleAccount);
         if (registeredUser == null) {
-            registeredUser = new UserInfo();
+            registeredUser = new UserDTO();
             registeredUser.setId("455l");
         }
 
-        SharedPreferences trackerPreferences =
-                mContext.getSharedPreferences(TrackerHelper.PREFERENCES_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = trackerPreferences.edit();
-        editor.putString(listOfAccountNames[0], registeredUser.getId());
-        boolean committed = editor.commit();
+        AppSettingsInfo.saveUserId(mContext, registeredUser.getId());
+
+        List<RouteExecutionDTO> routeExecutions = ApiClient.getInstance().getAssignedRoutExecutions(registeredUser.getId());
+        if (routeExecutions == null || routeExecutions.isEmpty()) {
+            // TODO throw a proper error???
+            throw new RuntimeException("no assigned routes");
+        }
+
+        AppSettingsInfo.saveCurrentRouteExecutionId(mContext, routeExecutions.get(0).getId());
 
         return registeredUser;
+
     }
 
     @Override
-    protected void onPostExecute(UserInfo userInfo) {
-        super.onPostExecute(userInfo);
+    protected void onPostExecute(UserDTO userInfo) {
 
+        super.onPostExecute(userInfo);
 
         // All set. Start the main Tracker Activity and finish the StartUp Activity
         mContext.startActivity(new Intent(mContext, Tracker.class));
@@ -55,5 +68,7 @@ public class StartUpAsyncRegisterUser extends AsyncTask<String, Integer, UserInf
         if (mContext instanceof Activity) {
             ((Activity) mContext).finish();
         }
+
     }
+
 }

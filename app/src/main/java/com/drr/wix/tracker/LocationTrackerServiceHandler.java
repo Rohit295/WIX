@@ -5,8 +5,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.wix.common.model.TrackInfo;
-
 /**
  * Created by rohitman on 10/29/2014.
  */
@@ -16,8 +14,6 @@ public class LocationTrackerServiceHandler extends Handler {
 
     private Service mLocationTrackingService;
     private LocationTracker mLocationTracker;
-
-    private TrackInfo mTrackInfo;
 
     public LocationTrackerServiceHandler(Service locationTrackingService) {
         super();
@@ -40,7 +36,7 @@ public class LocationTrackerServiceHandler extends Handler {
         }
 
         // Either Create a new LocationTracker and start tracking or simply destroy it
-        switch(msg.what) {
+        switch (msg.what) {
             case START_TRACKING_LOCATION:
                 if (mLocationTracker == null)
                     mLocationTracker = new LocationTracker(mLocationTrackingService, msg.replyTo);

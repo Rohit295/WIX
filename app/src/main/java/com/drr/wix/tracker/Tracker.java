@@ -20,8 +20,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.drr.wix.AppSettingsInfo;
 import com.drr.wix.R;
-import com.drr.wix.helper.TrackerHelper;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapFragment;
@@ -168,12 +168,12 @@ public class Tracker extends Activity {
 
                 // 1. Create a new TrackInfo to track all the location updates. In that include the
                 // TrackName & UserID
-                mTrackName = TrackerLocationUpdatesHandler.getNewTrackName();
+                mTrackName = AppSettingsInfo.getCurrentRouteExecutionId(getActivity());
                 Message createTrackingInfo = Message.obtain(null, TrackerLocationUpdatesHandler.CREATE_TRACKINFO);
                 dataBundle.putString(TrackerLocationUpdatesHandler.TRACK_NAME, mTrackName);
 
-                Long userID = new TrackerHelper(getActivity()).getUserID();
-                dataBundle.putLong(TrackerLocationUpdatesHandler.USER_ID, userID);
+                String userID = AppSettingsInfo.getUserId(getActivity());
+                dataBundle.putString(TrackerLocationUpdatesHandler.USER_ID, userID);
                 createTrackingInfo.setData(dataBundle);
 
                 try {
