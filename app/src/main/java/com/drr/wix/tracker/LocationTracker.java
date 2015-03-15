@@ -8,6 +8,7 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.drr.wix.AppSettingsInfo;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
@@ -18,8 +19,6 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.drr.wix.helper.TrackerHelper;
 
 /**
  * Created by rohitman on 10/29/2014.
@@ -35,7 +34,7 @@ public class LocationTracker implements
     private Messenger mTrackerLocationUpdatesMessenger;
 
     private String mTrackBeingCreated;
-    private long mTrackBeingCreatedForUser;
+    private String mTrackBeingCreatedForUser;
 
     private LocationClient mLocationClient;
 
@@ -51,7 +50,6 @@ public class LocationTracker implements
     private boolean mLocationConnectionInitializationDone = false;
 
     /**
-     *
      * @param locationTrackingContext
      */
     public LocationTracker(Context locationTrackingContext, Messenger locationUpdatesMessenger) {
@@ -65,7 +63,7 @@ public class LocationTracker implements
         mTrackerLocationUpdatesMessenger = new Messenger(TrackerLocationUpdatesHandler.getHandler());
 
         // Get the User ID and set it for later use
-        mTrackBeingCreatedForUser = new TrackerHelper(mLocationTrackingContext).getUserID();
+        mTrackBeingCreatedForUser = AppSettingsInfo.getUserId(mLocationTrackingContext);
 
         //TODO check that Google play services is available to the client
     }
@@ -93,6 +91,7 @@ public class LocationTracker implements
 
     /**
      * Called as soon as Tracker is able to connect to the Location Management client
+     *
      * @param bundle
      */
     @Override
@@ -125,7 +124,7 @@ public class LocationTracker implements
 
     private void sendLocationUpdate(Location location, int typeOfUpdate) {
         Log.i(this.getClass().getName() + ": sendLocationUpdate", ": about to send location update for"
-            + location.getLatitude() + "/" + location.getLongitude());
+                + location.getLatitude() + "/" + location.getLongitude());
 
         try {
             // 1. send the location back to the client so that the UI is updated
@@ -137,7 +136,7 @@ public class LocationTracker implements
             Message updateLocation = Message.obtain(null, TrackerLocationUpdatesHandler.SAVE_LOCATION_UPDATE);
             Bundle dataBundle = new Bundle();
             dataBundle.putString(TrackerLocationUpdatesHandler.TRACK_NAME, mTrackBeingCreated);
-            dataBundle.putLong(TrackerLocationUpdatesHandler.USER_ID, mTrackBeingCreatedForUser);
+            dataBundle.putString(TrackerLocationUpdatesHandler.USER_ID, mTrackBeingCreatedForUser);
             updateLocation.setData(dataBundle);
             updateLocation.obj = location;
             mTrackerLocationUpdatesMessenger.send(updateLocation);
@@ -152,14 +151,14 @@ public class LocationTracker implements
 
         try {
             // 1. send the location back to the client so that the UI is updated
-            Message messageToSend = Message.obtain(null,LocationTracker.LOCATION_FINAL_POSITION);
+            Message messageToSend = Message.obtain(null, LocationTracker.LOCATION_FINAL_POSITION);
             mLocationUpdatesMessenger.send(messageToSend);
 
             // 2. send it to the DB and close the current track
             Message updateLocation = Message.obtain(null, TrackerLocationUpdatesHandler.CLOSE_TRACKINFO);
             Bundle dataBundle = new Bundle();
             dataBundle.putString(TrackerLocationUpdatesHandler.TRACK_NAME, mTrackBeingCreated);
-            dataBundle.putLong(TrackerLocationUpdatesHandler.USER_ID, mTrackBeingCreatedForUser);
+            dataBundle.putString(TrackerLocationUpdatesHandler.USER_ID, mTrackBeingCreatedForUser);
             updateLocation.setData(dataBundle);
             mTrackerLocationUpdatesMessenger.send(updateLocation);
         } catch (RemoteException re) {
@@ -185,8 +184,8 @@ public class LocationTracker implements
                 location.getLongitude() + "; Altitude: " + location.getAltitude());
 
         // TODO- test code to simulate movement. check that this is commented out
-        location.setLatitude(location.getLatitude() + (double)(5*tempCounter)/10000);
-        location.setLongitude(location.getLongitude() + (double)(5*tempCounter++)/10000);
+        location.setLatitude(location.getLatitude() + (double) (5 * tempCounter) / 10000);
+        location.setLongitude(location.getLongitude() + (double) (5 * tempCounter++) / 10000);
 
         // send the location back to the client
         sendLocationUpdate(location, LocationTracker.LOCATION_UPDATE);

@@ -1,42 +1,54 @@
 package com.drr.wix.startup;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.drr.wix.AppSettingsInfo;
 import com.drr.wix.R;
-
 import com.drr.wix.api.ApiClient;
-import com.drr.wix.helper.TrackerHelper;
+import com.drr.wix.tracker.Tracker;
 
 public class StartUp extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_start_up);
+
         if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new StartUpFragment())
-                    .commit();
+            getFragmentManager().beginTransaction().add(R.id.container, new StartUpFragment()).commit();
         }
 
         ApiClient.createInstance(this);
 
         // Check to see if user has signed in before and if not store the User ID
-        new TrackerHelper(this).checkUserRegisteration();
+        checkUserRegistration();
+
     }
 
+    public void checkUserRegistration() {
+
+        // Now check to see if this user already has an ID associated and if not, use the TrackerHelper
+        // to async create a userID. When the Async Register process finishes, it will automatically
+        // start the Tracker activity
+        String thisUserID = AppSettingsInfo.getUserId(this);
+        if (thisUserID == null) {
+            new StartUpAsyncRegisterUser(this).execute();
+        } else {
+            // All set with the User ID (who has logged in before). Start the main Tracker Activity
+            startActivity(new Intent(this, Tracker.class));
+        }
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -51,10 +63,7 @@ public class StartUp extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
 
@@ -67,10 +76,10 @@ public class StartUp extends Activity {
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.f_start_up, container, false);
-            return rootView;
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            return inflater.inflate(R.layout.f_start_up, container, false);
         }
+
     }
+
 }
