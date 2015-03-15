@@ -47,7 +47,7 @@
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyB32bGE8j1tX9CWZVqvcftx3T83svhqjv8" />
+            android:value="AIzaSyBhsW91k1kk72HSr4Qqk-LxhJHfHF7IYdA" />
 
         <receiver
             android:name=".notification.GcmBroadcastReceiver"
